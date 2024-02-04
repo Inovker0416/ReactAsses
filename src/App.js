@@ -1,23 +1,20 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import UpvotesList from './components/UpvotesList';
+import { useUpvoteContext } from './context/UpvoteContext';
 
 function App() {
+  const { upvotes } = useUpvoteContext();
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Upvotes List Example</h1>
+      <UpvotesList />
+      <h2>All Upvotes</h2>
+      <ul>
+        {upvotes.map((isSelected, index) => (
+          <li key={index}>{isSelected ? 'Selected' : 'Not Selected'}</li>
+        ))}
+      </ul>
     </div>
   );
 }
