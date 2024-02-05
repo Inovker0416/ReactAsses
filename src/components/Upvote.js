@@ -14,7 +14,10 @@ const Upvote = ({ isSelected, onClick }) => {
         padding: '10px',
         borderRadius: '20px',
         width:'50px',
-        height:'50px'
+        height:'50px',
+        marginLeft: '10px',
+        marginTop: '10px',
+        marginBottom :'10px'
       }}
       onClick={handleClick}
     >
