@@ -12,10 +12,17 @@
     display: flex;
   }
   
-  .addbutton {
-    height: 90px;
-    width: 90px;
+  .upvote-button {
     background-color: #F4F6F8;
-    margin-left: 30px;
-    border-radius: 20px;
+    color: #343A40;
+    border: none;
+    padding: 5px;
+    cursor: pointer;
+    border-radius: 25px;
+    font-size: 16px;
+    margin: 20px;
+    height: 95px;
+    width: 95px;
+    justify-content: center;
   }
+  

@@ -1,35 +1,42 @@
-import React, { useState } from 'react';
+import React from 'react';
+import NorthIcon from '@mui/icons-material/North';
 
-const Upvote = ({ isSelected, onClick }) => {
+const Upvote = ({ isSelected, onToggle }) => {
+  const defaultStyle = {
+    backgroundColor: '#F4F6F8',
+    color: '#343A40',
+    cursor: 'pointer',
+    padding: '5px',
+    margin: '10px 10px 10px',
+    borderRadius: '25px',
+    display: 'inline-block',
+
+  };
+
+  const selectedStyle = {
+    backgroundColor: '#E5E8FD',
+    color: '#253CF2',
+    cursor: 'pointer',
+    padding: '5px',
+    borderRadius: '25px',
+    margin: '10px 10px 10px',
+    display: 'inline-block',
+  };
+
+  const arrowStyle = {
+    fontSize: '80px',
+  };
+
   const handleClick = () => {
-    onClick(!isSelected);
+    onToggle(!isSelected);
   };
 
   return (
     <div
-      className="upvote-container"
-      style={{
-        backgroundColor: isSelected ? '#E5E8FD' : '#F4F6F8',
-        cursor: 'pointer',
-        padding: '10px',
-        borderRadius: '20px',
-        width:'50px',
-        height:'50px',
-        marginLeft: '10px',
-        marginTop: '10px',
-        marginBottom :'10px'
-      }}
+      style={isSelected ? selectedStyle : defaultStyle}
       onClick={handleClick}
     >
-      <span
-        style={{
-          color: isSelected ? '#253CF2' : '#343A40',
-          fontSize: '20px',
-          fontWeight: 'bold',
-        }}
-      >
-        +
-      </span>
+      <NorthIcon style={arrowStyle} />
     </div>
   );
 };

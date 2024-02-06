@@ -1,14 +1,12 @@
-// src/App.js
 import React from 'react';
 import UpvotesList from './components/UpvotesList';
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <h1>Upvotes List Example</h1>
+    <div>
       <UpvotesList />
     </div>
   );
-}
+};
 
 export default App;

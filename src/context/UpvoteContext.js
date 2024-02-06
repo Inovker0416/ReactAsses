@@ -1,31 +1,23 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 
+// Create a context for managing upvote state
 const UpvoteContext = createContext();
 
-export const useUpvoteContext = () => {
-  return useContext(UpvoteContext);
-};
+// Custom hook to access the upvote context
+export const useUpvoteContext = () => useContext(UpvoteContext);
 
+// Provider component to manage upvote state
 export const UpvoteProvider = ({ children }) => {
-  const [upvotes, setUpvotes] = useState(() => {
-    // Retrieve data from local storage or use an empty array if no data exists
-    const storedData = localStorage.getItem('upvotes');
-    return storedData ? JSON.parse(storedData) : [];
-  });
+  const [upvotes, setUpvotes] = useState([]);
 
-  // Update local storage whenever upvotes change
-  useEffect(() => {
-    localStorage.setItem('upvotes', JSON.stringify(upvotes));
-  }, [upvotes]);
-
-  const toggleUpvote = (index) => {
+  const toggleUpvote = (index, isSelected) => {
     const newUpvotes = [...upvotes];
-    newUpvotes[index] = !newUpvotes[index];
+    newUpvotes[index] = isSelected;
     setUpvotes(newUpvotes);
   };
 
-  const addUpvote = () => {
-    setUpvotes([...upvotes, false]);
+  const addUpvote = (isSelected) => {
+    setUpvotes([...upvotes, isSelected]);
   };
 
   return (

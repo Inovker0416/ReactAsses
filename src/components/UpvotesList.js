@@ -1,72 +1,59 @@
-// components/UpvotesList.js
-import React, { useState } from 'react';
-import './UpvoteList.css'
+import React, { useState, useEffect } from 'react';
 import Upvote from './Upvote';
+import './UpvoteList.css'; // Import your CSS file
+import AddIcon from '@mui/icons-material/Add';
 
-const UpvotesList = () => {
-  const [unclickedUpvotes, setUnclickedUpvotes] = useState([]);
-  const [clickedUpvotes, setClickedUpvotes] = useState([]);
+const UpvotesList = ({ isClickedList }) => {
+  const storageKey = isClickedList ? 'unclickedUpvotes' : 'clickedUpvotes';
+  const [upvotes, setUpvotes] = useState([]);
 
-  const handleUpvoteClick = (upvoteId) => {
-    // Check if the upvote is in unclickedUpvotes
-    const unclickedIndex = unclickedUpvotes.findIndex((upvote) => upvote.id === upvoteId);
-
-    if (unclickedIndex !== -1) {
-      // Move from unclicked to clicked list
-      const clickedUpvote = unclickedUpvotes[unclickedIndex];
-      setUnclickedUpvotes((prevUnclicked) => prevUnclicked.filter((upvote) => upvote.id !== upvoteId));
-      setClickedUpvotes((prevClicked) => [...prevClicked, { ...clickedUpvote, isSelected: true }]);
-    } else {
-      // Move from clicked to unclicked list
-      const clickedIndex = clickedUpvotes.findIndex((upvote) => upvote.id === upvoteId);
-      const unclickedUpvote = clickedUpvotes[clickedIndex];
-      setClickedUpvotes((prevClicked) => prevClicked.filter((upvote) => upvote.id !== upvoteId));
-      setUnclickedUpvotes((prevUnclicked) => [...prevUnclicked, { ...unclickedUpvote, isSelected: false }]);
+  useEffect(() => {
+    // Load upvotes from localStorage when component mounts
+    const savedUpvotes = localStorage.getItem(storageKey);
+    if (savedUpvotes) {
+      setUpvotes(JSON.parse(savedUpvotes));
     }
+  }, [storageKey]);
+
+  const handleToggle = (index, isSelected) => {
+    const newUpvotes = [...upvotes];
+    newUpvotes[index] = isSelected;
+    setUpvotes(newUpvotes);
+    // Save updated upvotes to localStorage
+    localStorage.setItem(storageKey, JSON.stringify(newUpvotes));
   };
 
-  const handleAddUnclickedUpvote = () => {
-    const newUnclickedUpvote = { id: Date.now(), isSelected: false };
-    setUnclickedUpvotes([...unclickedUpvotes, newUnclickedUpvote]);
-  };
-
-  const handleAddClickedUpvote = () => {
-    const newClickedUpvote = { id: Date.now(), isSelected: true };
-    setClickedUpvotes([...clickedUpvotes, newClickedUpvote]);
+  const handleAddUpvote = () => {
+    setUpvotes([...upvotes, !isClickedList]); // Add upvote based on the list type
+    // Save updated upvotes to localStorage
+    localStorage.setItem(storageKey, JSON.stringify([...upvotes, !isClickedList]));
   };
 
   return (
-    <div>
-      <h2>Unclicked Upvotes</h2>
-      <button onClick={handleAddUnclickedUpvote}>Add Unclicked Upvote</button>
-      <div className='upvotes-list-container'>
-        <div style={{ display: 'flex' }}>
-          {unclickedUpvotes.map((upvote) => (
-            <Upvote
-              key={upvote.id}
-              isSelected={upvote.isSelected}
-              onClick={() => handleUpvoteClick(upvote.id)}
-            />
-          ))}
-        </div>
+    <div style = {{display:'flex', justifyContent:'center', marginTop:'5%'}}>
+      <div style={{ border: '1px solid #ccc', padding: '10px', margin: '10px', width:'80%', borderRadius:'25px' }}>
+        {upvotes.map((isSelected, index) => (
+          <Upvote
+            key={index}
+            isSelected={isSelected}
+            onToggle={(newState) => handleToggle(index, newState)}
+          />
+        ))}
       </div>
-      <h2>Clicked Upvotes</h2>
-      <div style={{ display: 'flex' }}>
-        <div className='upvotes-list-container'>
-          <div className='upvotes-list'>
-            {clickedUpvotes.map((upvote) => (
-              <Upvote
-                key={upvote.id}
-                isSelected={upvote.isSelected}
-                onClick={() => handleUpvoteClick(upvote.id)}
-              />
-            ))}
-          </div>
-        </div>
-        <div onClick={handleAddClickedUpvote} className='addbutton'>+</div>
+      <div style={{margin:'10px'}}>
+        <button className="upvote-button" onClick={handleAddUpvote}><AddIcon/></button>
       </div>
     </div>
   );
 };
 
-export default UpvotesList;
+const App = () => {
+  return (
+    <div>
+      <UpvotesList isClickedList />
+      <UpvotesList />
+    </div>
+  );
+};
+
+export default App;
